@@ -28,3 +28,30 @@ BEGIN
 	RAISE NOTICE 'o número de alunos aprovados com ambos pais phds é : %', cont;
 END;
 $$
+
+-- 2-) Resultado em função dos estudos
+-- Escreva um stored procedure que disponibiliza,
+-- utilizando um parâmetro em modo OUT,
+-- o número de alunos aprovados dentre aqueles que estudam sozinhos.
+
+SELECT * from tb_aluno;
+CREATE OR REPLACE PROCEDURE sp_aprovados_sozinhos(
+	 OUT cont INT
+) LANGUAGE plpgsql
+AS $$
+BEGIN
+	SELECT COUNT(*)
+	INTO cont
+	FROM tb_aluno
+	WHERE prep_study = 1 AND grade > 0;
+END;
+$$
+
+DO $$
+DECLARE
+cont INT;
+BEGIN
+	CALL sp_aprovados_sozinhos(cont);
+	RAISE NOTICE 'o número de alunos aprovados que estudam sozinhos é : %', cont;
+END;
+$$
